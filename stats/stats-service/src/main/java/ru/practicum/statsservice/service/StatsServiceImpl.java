@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.stats.statsdto.InnerStatsDto;
 import ru.practicum.stats.statsdto.OutHitsDto;
-import ru.practicum.stats.statsdto.OutStatsDto;
 import ru.practicum.statsservice.mapper.StatsMapper;
 import ru.practicum.statsservice.model.Stats;
 import ru.practicum.statsservice.repository.StatsRepository;

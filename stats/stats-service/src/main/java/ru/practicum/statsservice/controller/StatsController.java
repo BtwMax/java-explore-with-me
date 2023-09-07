@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.stats.statsdto.InnerStatsDto;
 import ru.practicum.stats.statsdto.OutHitsDto;
-import ru.practicum.stats.statsdto.OutStatsDto;
 import ru.practicum.statsservice.service.StatsService;
 
 import javax.validation.Valid;
