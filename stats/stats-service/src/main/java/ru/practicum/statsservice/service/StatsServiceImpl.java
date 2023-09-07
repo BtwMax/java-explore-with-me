@@ -29,10 +29,9 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public OutStatsDto addStats(InnerStatsDto innerStatsDto) {
+    public void addStats(InnerStatsDto innerStatsDto) {
         Stats stats = StatsMapper.toStats(innerStatsDto);
-        Stats statsStorage = statsRepository.save(stats);
-        return StatsMapper.toOutStats(statsStorage);
+        statsRepository.save(stats);
     }
 
     @Override

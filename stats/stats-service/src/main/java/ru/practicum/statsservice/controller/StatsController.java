@@ -24,9 +24,9 @@ public class StatsController {
     }
 
     @PostMapping(path = "/hit")
-    public OutStatsDto addStats(@RequestBody @Valid InnerStatsDto innerStatsDto) {
+    public void addStats(@RequestBody @Valid InnerStatsDto innerStatsDto) {
         log.info("Запрос на добавление статистики посещения ивента");
-        return statsService.addStats(innerStatsDto);
+        statsService.addStats(innerStatsDto);
     }
 
     @GetMapping(path = "/stats")

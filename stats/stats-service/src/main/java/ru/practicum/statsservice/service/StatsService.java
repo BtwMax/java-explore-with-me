@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface StatsService {
 
-    OutStatsDto addStats(InnerStatsDto innerStatsDto);
+    void addStats(InnerStatsDto innerStatsDto);
 
     List<OutHitsDto> getStats(String start, String end, List<String> uris, boolean unique);
 }
