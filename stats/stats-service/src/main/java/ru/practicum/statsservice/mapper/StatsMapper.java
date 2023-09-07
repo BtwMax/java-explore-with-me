@@ -2,7 +2,6 @@ package ru.practicum.statsservice.mapper;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.stats.statsdto.InnerStatsDto;
-import ru.practicum.stats.statsdto.OutStatsDto;
 import ru.practicum.statsservice.model.Stats;
 
 @UtilityClass
@@ -17,12 +16,4 @@ public class StatsMapper {
                 .build();
     }
 
-    public OutStatsDto toOutStats(Stats stats) {
-        return OutStatsDto.builder()
-                .id(stats.getId())
-                .uri(stats.getUri())
-                .ip(stats.getIp())
-                .timestamp(stats.getTimestamp())
-                .build();
-    }
 }

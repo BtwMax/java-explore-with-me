@@ -1,6 +1,7 @@
 package ru.practicum.statsservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.stats.statsdto.InnerStatsDto;
@@ -8,6 +9,7 @@ import ru.practicum.stats.statsdto.OutHitsDto;
 import ru.practicum.statsservice.service.StatsService;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -29,10 +31,13 @@ public class StatsController {
     }
 
     @GetMapping(path = "/stats")
-    public List<OutHitsDto> getStats(@RequestParam String start,
-                                     @RequestParam String end,
+    public List<OutHitsDto> getStats(@RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                          LocalDateTime start,
+                                      @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                          LocalDateTime end,
                                      @RequestParam(required = false) List<String> uris,
                                      @RequestParam(defaultValue = "false") boolean unique) {
+        log.info("Запрос вывод статистики посещений ивента");
         return statsService.getStats(start, end, uris, unique);
     }
 }
