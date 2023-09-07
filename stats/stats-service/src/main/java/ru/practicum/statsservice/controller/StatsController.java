@@ -8,6 +8,7 @@ import ru.practicum.stats.statsdto.OutHitsDto;
 import ru.practicum.stats.statsdto.OutStatsDto;
 import ru.practicum.statsservice.service.StatsService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class StatsController {
     }
 
     @PostMapping(path = "/hit")
-    public OutStatsDto addStats(@RequestBody InnerStatsDto innerStatsDto) {
+    public OutStatsDto addStats(@RequestBody @Valid InnerStatsDto innerStatsDto) {
         log.info("Запрос на добавление статистики посещения ивента");
         return statsService.addStats(innerStatsDto);
     }
