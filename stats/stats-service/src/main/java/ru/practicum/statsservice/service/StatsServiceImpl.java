@@ -2,6 +2,7 @@ package ru.practicum.statsservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.stats.statsdto.InnerStatsDto;
 import ru.practicum.stats.statsdto.OutHitsDto;
 import ru.practicum.statsservice.mapper.StatsMapper;
@@ -9,7 +10,6 @@ import ru.practicum.statsservice.model.Stats;
 import ru.practicum.statsservice.repository.StatsRepository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 public class StatsServiceImpl implements StatsService {
 
     private final StatsRepository statsRepository;
-    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     public StatsServiceImpl(StatsRepository statsRepository) {
         this.statsRepository = statsRepository;
     }
 
+    @Transactional
     @Override
     public void addStats(InnerStatsDto innerStatsDto) {
         Stats stats = StatsMapper.toStats(innerStatsDto);
