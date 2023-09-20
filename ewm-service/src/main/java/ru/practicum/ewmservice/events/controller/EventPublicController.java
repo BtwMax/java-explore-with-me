@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewmservice.events.dto.EventFullDto;
+import ru.practicum.ewmservice.events.dto.EventSearchParams;
 import ru.practicum.ewmservice.events.dto.EventShortDto;
 import ru.practicum.ewmservice.events.model.enums.Sorts;
 import ru.practicum.ewmservice.events.service.EventPublicService;
@@ -47,7 +48,19 @@ public class EventPublicController {
                                          @RequestParam(defaultValue = "10") @Positive int size,
                                          HttpServletRequest request) {
         log.info("GET запрос на получение всех событий");
-        return publicService.getPublicEvents(text, categories, paid, rangeStart, rangeEnd,
-                onlyAvailable, sorts, from, size, request);
+
+        EventSearchParams params = EventSearchParams.builder()
+                .text(text)
+                .categories(categories)
+                .paid(paid)
+                .rangeStart(rangeStart)
+                .rangeEnd(rangeEnd)
+                .onlyAvailable(onlyAvailable)
+                .sorts(sorts)
+                .from(from)
+                .size(size)
+                .build();
+
+        return publicService.getPublicEvents(params, request);
     }
 }

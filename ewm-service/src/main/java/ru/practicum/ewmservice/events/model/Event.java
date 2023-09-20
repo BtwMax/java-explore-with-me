@@ -31,13 +31,13 @@ public class Event {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @Column(name = "created_on")
+    @Column
     private LocalDateTime createdOn;
 
     @Column
     private String description;
 
-    @Column(name = "event_date")
+    @Column
     private LocalDateTime eventDate;
 
     @ManyToOne
@@ -51,13 +51,13 @@ public class Event {
 
     private Boolean paid;
 
-    @Column(name = "participant_limit")
+    @Column
     private Long participantLimit;
 
-    @Column(name = "published_on")
+    @Column
     private LocalDateTime publishedOn;
 
-    @Column(name = "request_moderation")
+    @Column
     private Boolean requestModeration;
 
     @Enumerated(EnumType.STRING)

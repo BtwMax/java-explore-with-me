@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewmservice.events.dto.EventFullDto;
+import ru.practicum.ewmservice.events.dto.EventSearchParams;
 import ru.practicum.ewmservice.events.dto.EventShortDto;
 import ru.practicum.ewmservice.events.mapper.EventMapper;
 import ru.practicum.ewmservice.events.model.Event;
@@ -41,22 +42,23 @@ public class EventPublicServiceImpl implements EventPublicService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EventShortDto> getPublicEvents(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
-                                               LocalDateTime rangeEnd, Boolean onlyAvailable, Sorts sorts, Integer from,
-                                               Integer size, HttpServletRequest request) {
-        if (rangeEnd != null && rangeStart != null && rangeStart.isAfter(rangeEnd)) {
+    public List<EventShortDto> getPublicEvents(EventSearchParams params, HttpServletRequest request) {
+        if (params.getRangeEnd() != null && params.getRangeStart() != null &&
+                params.getRangeStart().isAfter(params.getRangeEnd())) {
             throw new BadRequestException("Неверно задано дата и время");
         }
-        Pageable page = PageRequest.of(from / size, size);
+        Pageable page = PageRequest.of(params.getFrom() / params.getSize(), params.getSize());
         List<Event> events;
-        if (rangeEnd == null && rangeStart == null) {
-            events = eventRepository.findAllByPublicNoDate(text, categories, paid, LocalDateTime.now(), page);
+        if (params.getRangeEnd() == null && params.getRangeStart() == null) {
+            events = eventRepository.findAllByPublicNoDate(params.getText(), params.getCategories(), params.getPaid(),
+                    LocalDateTime.now(), page);
         } else {
-            events = eventRepository.findAllByPublic(text, categories, paid, rangeStart, rangeEnd, page);
+            events = eventRepository.findAllByPublic(params.getText(), params.getCategories(), params.getPaid(),
+                    params.getRangeStart(), params.getRangeEnd(), page);
         }
         events.forEach(event -> event.setViews(getEventStat(request)));
-        if (sorts != null) {
-            switch (sorts) {
+        if (params.getSorts() != null) {
+            switch (params.getSorts()) {
                 case EVENT_DATE:
                     events.sort(Comparator.comparing(Event::getEventDate));
                     break;
@@ -65,7 +67,7 @@ public class EventPublicServiceImpl implements EventPublicService {
                     break;
             }
         }
-        if (onlyAvailable) {
+        if (params.getOnlyAvailable()) {
             List<Event> availableEvents = events.stream().filter(eventDto -> eventDto.getParticipantLimit() > eventDto.getConfirmedRequests()
                     || eventDto.getParticipantLimit() == 0).collect(Collectors.toList());
             return availableEvents.stream()

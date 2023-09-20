@@ -193,12 +193,19 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
         List<ParticipationRequestDto> rejectedRequests = new ArrayList<>();
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("No such event"));
-        updateRequest.getRequestIds().forEach(value -> {
-            ParticipationRequest request = requestRepository.findById(value).orElseThrow(() -> new NotFoundException("No such request"));
+
+        List<Long> requestIds = updateRequest.getRequestIds();
+        List<ParticipationRequest> requests = requestRepository.findAllById(requestIds);
+        if (requests.size() != requestIds.size()) {
+            throw new NotFoundException("No such request");
+        }
+
+        for (ParticipationRequest request : requests) {
             if (request.getStatus() == Status.CONFIRMED && updateRequest.getStatus() == Status.REJECTED) {
                 throw new ConflictException("Can't reject confirmed request");
             }
             request.setStatus(updateRequest.getStatus());
+
             if (updateRequest.getStatus() == Status.CONFIRMED) {
                 event.setConfirmedRequests(event.getConfirmedRequests() + 1);
                 if (event.getConfirmedRequests() > event.getParticipantLimit()) {
@@ -206,11 +213,14 @@ public class EventPrivateServiceImpl implements EventPrivateService {
                 }
                 confirmedRequests.add(RequestMapper.toParticipationRequestDto(request));
             }
+
             if (updateRequest.getStatus() == Status.REJECTED) {
                 rejectedRequests.add(RequestMapper.toParticipationRequestDto(request));
             }
+
             requestRepository.save(request);
-        });
+        }
+
         EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult();
         if (!confirmedRequests.isEmpty()) {
             result.setConfirmedRequests(confirmedRequests);
@@ -218,6 +228,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         if (!rejectedRequests.isEmpty()) {
             result.setRejectedRequests(rejectedRequests);
         }
+
         return result;
     }
 

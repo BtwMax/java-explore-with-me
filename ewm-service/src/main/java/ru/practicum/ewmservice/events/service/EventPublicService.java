@@ -1,6 +1,7 @@
 package ru.practicum.ewmservice.events.service;
 
 import ru.practicum.ewmservice.events.dto.EventFullDto;
+import ru.practicum.ewmservice.events.dto.EventSearchParams;
 import ru.practicum.ewmservice.events.dto.EventShortDto;
 import ru.practicum.ewmservice.events.model.enums.Sorts;
 
@@ -10,9 +11,7 @@ import java.util.List;
 
 public interface EventPublicService {
 
-    List<EventShortDto> getPublicEvents(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
-                                        LocalDateTime rangeEnd, Boolean onlyAvailable, Sorts sorts, Integer from,
-                                        Integer size, HttpServletRequest request);
+    List<EventShortDto> getPublicEvents(EventSearchParams params, HttpServletRequest request);
 
     EventFullDto getEventById(long eventId, HttpServletRequest request);
 }
