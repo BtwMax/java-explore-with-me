@@ -10,7 +10,6 @@ import ru.practicum.ewmservice.events.dto.EventSearchParams;
 import ru.practicum.ewmservice.events.dto.EventShortDto;
 import ru.practicum.ewmservice.events.mapper.EventMapper;
 import ru.practicum.ewmservice.events.model.Event;
-import ru.practicum.ewmservice.events.model.enums.Sorts;
 import ru.practicum.ewmservice.events.model.enums.State;
 import ru.practicum.ewmservice.events.repository.EventRepository;
 import ru.practicum.ewmservice.events.service.EventPublicService;
