@@ -231,35 +231,4 @@ public class EventPrivateServiceImpl implements EventPrivateService {
 
         return result;
     }
-
-    private List<ParticipationRequest> confirmRequests(List<Long> requestIds, Event event) {
-        long availableSlots = event.getParticipantLimit() - requestRepository.findConfirmedRequests(event.getId());
-        long numOfConfirmedRequests = Math.min(requestIds.size(), availableSlots);
-
-        List<ParticipationRequest> requestsList = requestRepository.findAllByIdIn(requestIds);
-
-        return requestsList.stream()
-                .filter(request -> request.getStatus() != Status.CONFIRMED)
-                .limit(numOfConfirmedRequests)
-                .peek(request -> request.setStatus(Status.CONFIRMED))
-                .collect(Collectors.toList());
-    }
-
-    private List<ParticipationRequest> rejectRemainingRequests(List<Long> requestIds) {
-        List<ParticipationRequest> requestsList = requestRepository.findAllByIdIn(requestIds);
-
-        return requestsList.stream()
-                .filter(request -> !request.getStatus().equals(Status.CONFIRMED))
-                .peek(request -> request.setStatus(Status.REJECTED))
-                .collect(Collectors.toList());
-    }
-
-    private List<ParticipationRequest> rejectRequests(List<Long> requestIds) {
-        List<ParticipationRequest> requestsList = requestRepository.findAllByIdIn(requestIds);
-
-        return requestsList.stream()
-                .filter(request -> request.getStatus() != Status.REJECTED)
-                .peek(request -> request.setStatus(Status.REJECTED))
-                .collect(Collectors.toList());
-    }
 }
